@@ -1,7 +1,11 @@
-const tasks = [];
+const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 let searchValue = '';
 let statusValue = 'all';
 let sortValue = 'default';
+
+function saveTasks() {
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
 
 const app = document.createElement('main');
 app.className = 'app';
@@ -156,6 +160,7 @@ editButton.addEventListener('click', () => {
 
         current.title = value;
         current.date = editDateInput.value;
+        saveTasks();
         renderTasks();
       });
 
@@ -182,6 +187,7 @@ toggleButton.addEventListener('click', () => {
 
   if (currentTask) {
     currentTask.completed = !currentTask.completed;
+    saveTasks();
     renderTasks();
   }
 });
@@ -196,6 +202,7 @@ toggleButton.addEventListener('click', () => {
 
     if (index !== -1) {
       tasks.splice(index, 1);
+      saveTasks();
       renderTasks();
     }
   });
@@ -279,6 +286,7 @@ form.addEventListener('submit', (event) => {
   };
 
   tasks.push(task);
+  saveTasks();
   renderTasks();
 
   form.reset();
