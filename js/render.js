@@ -51,12 +51,12 @@ function createTaskElement(task) {
     item.classList.add('todo-item--completed');
   }
   item.addEventListener('dragstart', () => {
-  draggedTaskId = task.id;
+  state.draggedTaskId = task.id;
   item.classList.add('todo-item--dragging');
 });
 
 item.addEventListener('dragend', () => {
-  draggedTaskId = null;
+  state.draggedTaskId = null;
   item.classList.remove('todo-item--dragging');
 });
 
@@ -65,7 +65,7 @@ item.addEventListener('dragover', (event) => {
 });
 
 item.addEventListener('drop', () => {
-  moveTask(draggedTaskId, task.id);
+  moveTask(state.draggedTaskId, task.id);
 });
   return item;
 }
@@ -73,8 +73,8 @@ item.addEventListener('drop', () => {
 function renderTasks() {
   list.innerHTML = '';
 
-  let filteredTasks = tasks.filter((task) => {
-    return task.title.toLowerCase().includes(searchValue.toLowerCase());
+  let filteredTasks = state.tasks.filter((task) => {
+    return task.title.toLowerCase().includes(state.searchValue.toLowerCase());
   });
 
   if (state.statusValue === 'active') {
@@ -104,7 +104,7 @@ function renderTasks() {
   if (filteredTasks.length === 0) {
     const emptyMessage = document.createElement('li');
     emptyMessage.className = 'todo-list__empty';
-    emptyMessage.textContent = searchValue ? 'Ничего не найдено' : 'Список задач пуст';
+    emptyMessage.textContent = state.searchValue ? 'Ничего не найдено' : 'Список задач пуст';
     list.append(emptyMessage);
     return;
   }
