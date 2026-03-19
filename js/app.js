@@ -116,8 +116,14 @@ function moveTask(fromId, toId) {
     return;
   }
 
-  const [movedTask] = tasks.splice(fromIndex, 1);
-  tasks.splice(toIndex, 0, movedTask);
+  const movedTask = tasks[fromIndex];
+  const updatedTasks = [...tasks];
+
+  updatedTasks.splice(fromIndex, 1);
+  updatedTasks.splice(toIndex, 0, movedTask);
+
+  tasks.length = 0;
+  tasks.push(...updatedTasks);
 
   saveTasks(tasks);
   renderTasks();
