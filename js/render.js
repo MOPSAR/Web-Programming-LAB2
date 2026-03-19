@@ -1,6 +1,8 @@
 function createTaskElement(task) {
   const item = document.createElement('li');
   item.className = 'todo-item';
+  item.draggable = true;
+  item.dataset.id = task.id;
 
   const info = document.createElement('div');
   info.className = 'todo-item__info';
@@ -48,7 +50,23 @@ function createTaskElement(task) {
   if (task.completed) {
     item.classList.add('todo-item--completed');
   }
+  item.addEventListener('dragstart', () => {
+  draggedTaskId = task.id;
+  item.classList.add('todo-item--dragging');
+});
 
+item.addEventListener('dragend', () => {
+  draggedTaskId = null;
+  item.classList.remove('todo-item--dragging');
+});
+
+item.addEventListener('dragover', (event) => {
+  event.preventDefault();
+});
+
+item.addEventListener('drop', () => {
+  moveTask(draggedTaskId, task.id);
+});
   return item;
 }
 

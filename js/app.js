@@ -2,6 +2,7 @@ const tasks = loadTasks();
 let searchValue = '';
 let statusValue = 'all';
 let sortValue = 'default';
+let draggedTaskId = null;
 
 const app = document.createElement('main');
 app.className = 'app';
@@ -101,6 +102,25 @@ function deleteTask(taskId) {
     saveTasks(tasks);
     renderTasks();
   }
+}
+
+function moveTask(fromId, toId) {
+  if (fromId === toId || fromId === null) {
+    return;
+  }
+
+  const fromIndex = tasks.findIndex((task) => task.id === fromId);
+  const toIndex = tasks.findIndex((task) => task.id === toId);
+
+  if (fromIndex === -1 || toIndex === -1) {
+    return;
+  }
+
+  const [movedTask] = tasks.splice(fromIndex, 1);
+  tasks.splice(toIndex, 0, movedTask);
+
+  saveTasks(tasks);
+  renderTasks();
 }
 
 function toggleTask(taskId) {
