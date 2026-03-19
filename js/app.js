@@ -1,11 +1,7 @@
-const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+const tasks = loadTasks();
 let searchValue = '';
 let statusValue = 'all';
 let sortValue = 'default';
-
-function saveTasks() {
-  localStorage.setItem('tasks', JSON.stringify(tasks));
-}
 
 const app = document.createElement('main');
 app.className = 'app';
@@ -97,36 +93,31 @@ container.append(title, controls, listSection);
 app.append(container);
 document.body.append(app);
 
-function createTaskElement(task) {
-  const item = document.createElement('li');
-  item.className = 'todo-item';
+function deleteTask(taskId) {
+  const index = tasks.findIndex((item) => item.id === taskId);
 
-  const info = document.createElement('div');
-  info.className = 'todo-item__info';
+  if (index !== -1) {
+    tasks.splice(index, 1);
+    saveTasks(tasks);
+    renderTasks();
+  }
+}
 
-  const text = document.createElement('h3');
-  text.className = 'todo-item__title';
-  text.textContent = task.title;
+function toggleTask(taskId) {
+  const currentTask = tasks.find((item) => item.id === taskId);
 
-  const date = document.createElement('p');
-  date.className = 'todo-item__date';
-  date.textContent = task.date ? `Срок: ${task.date}` : 'Без даты';
+  if (currentTask) {
+    currentTask.completed = !currentTask.completed;
+    saveTasks(tasks);
+    renderTasks();
+  }
+}
 
-  info.append(text, date);
-
-  const actions = document.createElement('div');
-  actions.className = 'todo-item__actions';
-
-
-const editButton = document.createElement('button');
-editButton.className = 'todo-item__edit';
-editButton.textContent = 'Редактировать';
-
-editButton.addEventListener('click', () => {
+function startEditMode(taskId) {
   list.innerHTML = '';
 
   tasks.forEach((current) => {
-    if (current.id === task.id) {
+    if (current.id === taskId) {
       const item = document.createElement('li');
       item.className = 'todo-item';
 
@@ -160,7 +151,7 @@ editButton.addEventListener('click', () => {
 
         current.title = value;
         current.date = editDateInput.value;
-        saveTasks();
+        saveTasks(tasks);
         renderTasks();
       });
 
@@ -172,84 +163,8 @@ editButton.addEventListener('click', () => {
       item.append(editWrap);
       list.append(item);
     } else {
-      const normalItem = createTaskElement(current);
-      list.append(normalItem);
+      list.append(createTaskElement(current));
     }
-  });
-});
-
-const toggleButton = document.createElement('button');
-toggleButton.className = 'todo-item__toggle';
-toggleButton.textContent = task.completed ? 'Не выполнено' : 'Выполнено';
-
-toggleButton.addEventListener('click', () => {
-  const currentTask = tasks.find((item) => item.id === task.id);
-
-  if (currentTask) {
-    currentTask.completed = !currentTask.completed;
-    saveTasks();
-    renderTasks();
-  }
-});
-
-
-  const deleteButton = document.createElement('button');
-  deleteButton.className = 'todo-item__delete';
-  deleteButton.textContent = 'Удалить';
-
-  deleteButton.addEventListener('click', () => {
-    const index = tasks.findIndex((item) => item.id === task.id);
-
-    if (index !== -1) {
-      tasks.splice(index, 1);
-      saveTasks();
-      renderTasks();
-    }
-  });
-
-actions.append(editButton, toggleButton, deleteButton);
-  item.append(info, actions);
-  if (task.completed) {
-  item.classList.add('todo-item--completed');
-  }
-
-  return item;
-}
-
-function renderTasks() {
-  list.innerHTML = '';
-
-  let filteredTasks = tasks.filter((task) => {
-    return task.title.toLowerCase().includes(searchValue.toLowerCase());
-  });
-
-  if (statusValue === 'active') {
-    filteredTasks = filteredTasks.filter((task) => !task.completed);
-  }
-
-  if (statusValue === 'completed') {
-    filteredTasks = filteredTasks.filter((task) => task.completed);
-  }
-
-  if (sortValue === 'date-asc') {
-    filteredTasks.sort((a, b) => {
-      if (!a.date) return 1;
-      if (!b.date) return -1;
-      return new Date(a.date) - new Date(b.date);
-    });
-  }
-
-  if (sortValue === 'date-desc') {
-    filteredTasks.sort((a, b) => {
-      if (!a.date) return 1;
-      if (!b.date) return -1;
-      return new Date(b.date) - new Date(a.date);
-    });
-  }
-
-  filteredTasks.forEach((task) => {
-    const taskElement = createTaskElement(task);
-    list.append(taskElement);
   });
 }
 
@@ -286,7 +201,7 @@ form.addEventListener('submit', (event) => {
   };
 
   tasks.push(task);
-  saveTasks();
+  saveTasks(tasks);
   renderTasks();
 
   form.reset();

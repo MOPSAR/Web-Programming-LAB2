@@ -187,3 +187,11 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+.todo-list__empty {
+  padding: 20px;
+  text-align: center;
+  color: #777;
+  border: 1px dashed #cfd6dd;
+  border-radius: 12px;
+}
