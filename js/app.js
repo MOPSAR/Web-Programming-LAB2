@@ -111,6 +111,37 @@ function createTaskElement(task) {
   actions.className = 'todo-item__actions';
 
 
+  const editButton = document.createElement('button');
+editButton.className = 'todo-item__edit';
+editButton.textContent = 'Редактировать';
+
+editButton.addEventListener('click', () => {
+  const currentTask = tasks.find((item) => item.id === task.id);
+
+  if (!currentTask) {
+    return;
+  }
+
+  const newTitle = prompt('Введите новое название', currentTask.title);
+  if (newTitle === null) {
+    return;
+  }
+
+  const trimmedTitle = newTitle.trim();
+  if (!trimmedTitle) {
+    return;
+  }
+
+  const newDate = prompt('Введите новую дату в формате YYYY-MM-DD', currentTask.date);
+  if (newDate === null) {
+    return;
+  }
+
+  currentTask.title = trimmedTitle;
+  currentTask.date = newDate;
+  renderTasks();
+});
+
 const toggleButton = document.createElement('button');
 toggleButton.className = 'todo-item__toggle';
 toggleButton.textContent = task.completed ? 'Не выполнено' : 'Выполнено';
@@ -138,7 +169,7 @@ toggleButton.addEventListener('click', () => {
     }
   });
 
-  actions.append(toggleButton, deleteButton);
+actions.append(editButton, toggleButton, deleteButton);
   item.append(info, actions);
   if (task.completed) {
   item.classList.add('todo-item--completed');
