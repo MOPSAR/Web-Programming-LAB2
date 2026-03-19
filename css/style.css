@@ -71,6 +71,132 @@ body {
   margin: 0;
 }
 
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #e3e7eb;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  background: #fff;
+}
+
+.todo-item__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.todo-item__title {
+  margin: 0 0 8px;
+  font-size: 18px;
+  word-break: break-word;
+}
+
+.todo-item__date {
+  margin: 0;
+  color: #666;
+}
+
+.todo-item__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.todo-item__edit,
+.todo-item__toggle,
+.todo-item__delete,
+.todo-item__save,
+.todo-item__cancel {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  color: white;
+}
+
+.todo-item__edit {
+  background: #0d6efd;
+}
+
+.todo-item__toggle {
+  background: #198754;
+}
+
+.todo-item__delete {
+  background: #d9534f;
+}
+
+.todo-item--completed {
+  opacity: 0.7;
+}
+
+.todo-item--completed .todo-item__title {
+  text-decoration: line-through;
+}
+
+.todo-item__edit-wrap {
+  display: grid;
+  grid-template-columns: 1fr 180px auto auto;
+  gap: 10px;
+  width: 100%;
+}
+
+.todo-item__edit-input,
+.todo-item__edit-date {
+  padding: 10px 12px;
+  border: 1px solid #cfd6dd;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.todo-item__save {
+  background: #198754;
+}
+
+.todo-item__cancel {
+  background: #6c757d;
+}
+
+.todo-list__empty {
+  padding: 20px;
+  text-align: center;
+  color: #777;
+  border: 1px dashed #cfd6dd;
+  border-radius: 12px;
+}
+
+.todo-item--dragging {
+  opacity: 0.5;
+}
+
+.todo-form__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.todo-form__input:focus,
+.todo-form__date:focus,
+.todo__search:focus,
+.todo__select:focus,
+.todo-item__edit-input:focus,
+.todo-item__edit-date:focus {
+  outline: 2px solid #99c2ff;
+  border-color: #99c2ff;
+}
+
+.todo-form__button:hover,
+.todo-item__edit:hover,
+.todo-item__toggle:hover,
+.todo-item__delete:hover,
+.todo-item__save:hover,
+.todo-item__cancel:hover {
+  filter: brightness(0.95);
+}
+
 @media (max-width: 768px) {
   .todo {
     padding: 18px;
@@ -87,115 +213,21 @@ body {
   .todo__filters {
     flex-direction: column;
   }
-}
 
-.todo-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  padding: 16px;
-  border: 1px solid #e3e7eb;
-  border-radius: 12px;
-  margin-bottom: 12px;
-}
+  .todo-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-.todo-item__title {
-  margin: 0 0 8px;
-  font-size: 18px;
-}
+  .todo-item__actions {
+    justify-content: stretch;
+  }
 
-.todo-item__date {
-  margin: 0;
-  color: #666;
-}
+  .todo-item__actions button {
+    width: 100%;
+  }
 
-.todo-item__actions {
-  display: flex;
-  gap: 8px;
-}
-
-.todo-item__delete {
-  border: none;
-  border-radius: 8px;
-  padding: 10px 12px;
-  cursor: pointer;
-  background: #d9534f;
-  color: white;
-}
-
-.todo-item__toggle {
-  border: none;
-  border-radius: 8px;
-  padding: 10px 12px;
-  cursor: pointer;
-  background: #198754;
-  color: white;
-}
-
-.todo-item--completed {
-  opacity: 0.7;
-}
-
-.todo-item--completed .todo-item__title {
-  text-decoration: line-through;
-}
-
-.todo-item__edit {
-  border: none;
-  border-radius: 8px;
-  padding: 10px 12px;
-  cursor: pointer;
-  background: #0d6efd;
-  color: white;
-}
-
-.todo-item__edit-wrap {
-  display: grid;
-  grid-template-columns: 1fr 180px auto auto;
-  gap: 10px;
-  width: 100%;
-}
-
-.todo-item__edit-input,
-.todo-item__edit-date {
-  padding: 10px 12px;
-  border: 1px solid #cfd6dd;
-  border-radius: 8px;
-}
-
-.todo-item__save,
-.todo-item__cancel {
-  border: none;
-  border-radius: 8px;
-  padding: 10px 12px;
-  cursor: pointer;
-}
-
-.todo-item__save {
-  background: #198754;
-  color: white;
-}
-
-.todo-item__cancel {
-  background: #6c757d;
-  color: white;
-}
-
-@media (max-width: 768px) {
   .todo-item__edit-wrap {
     grid-template-columns: 1fr;
   }
-}
-
-.todo-list__empty {
-  padding: 20px;
-  text-align: center;
-  color: #777;
-  border: 1px dashed #cfd6dd;
-  border-radius: 12px;
-}
-
-.todo-item--dragging {
-  opacity: 0.5;
 }

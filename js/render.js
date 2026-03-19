@@ -77,15 +77,15 @@ function renderTasks() {
     return task.title.toLowerCase().includes(searchValue.toLowerCase());
   });
 
-  if (statusValue === 'active') {
+  if (state.statusValue === 'active') {
     filteredTasks = filteredTasks.filter((task) => !task.completed);
   }
 
-  if (statusValue === 'completed') {
+  if (state.statusValue === 'completed') {
     filteredTasks = filteredTasks.filter((task) => task.completed);
   }
 
-  if (sortValue === 'date-asc') {
+  if (state.sortValue === 'date-asc') {
     filteredTasks.sort((a, b) => {
       if (!a.date) return 1;
       if (!b.date) return -1;
@@ -93,7 +93,7 @@ function renderTasks() {
     });
   }
 
-  if (sortValue === 'date-desc') {
+  if (state.sortValue === 'date-desc') {
     filteredTasks.sort((a, b) => {
       if (!a.date) return 1;
       if (!b.date) return -1;

@@ -1,8 +1,10 @@
-const tasks = loadTasks();
-let searchValue = '';
-let statusValue = 'all';
-let sortValue = 'default';
-let draggedTaskId = null;
+const state = {
+  tasks: loadTasks(),
+  searchValue: '',
+  statusValue: 'all',
+  sortValue: 'default',
+  draggedTaskId: null
+};
 
 const app = document.createElement('main');
 app.className = 'app';
@@ -33,6 +35,7 @@ const addButton = document.createElement('button');
 addButton.className = 'todo-form__button';
 addButton.type = 'submit';
 addButton.textContent = 'Добавить';
+addButton.disabled = true;
 
 form.append(taskInput, dateInput, addButton);
 
@@ -95,11 +98,11 @@ app.append(container);
 document.body.append(app);
 
 function deleteTask(taskId) {
-  const index = tasks.findIndex((item) => item.id === taskId);
+  const index = state.tasks.findIndex((item) => item.id === taskId);
 
   if (index !== -1) {
-    tasks.splice(index, 1);
-    saveTasks(tasks);
+    state.tasks.splice(index, 1);
+    saveTasks(state.tasks);
     renderTasks();
   }
 }
@@ -109,32 +112,31 @@ function moveTask(fromId, toId) {
     return;
   }
 
-  const fromIndex = tasks.findIndex((task) => task.id === fromId);
-  const toIndex = tasks.findIndex((task) => task.id === toId);
+  const fromIndex = state.tasks.findIndex((task) => task.id === fromId);
+  const toIndex = state.tasks.findIndex((task) => task.id === toId);
 
   if (fromIndex === -1 || toIndex === -1) {
     return;
   }
 
-  const movedTask = tasks[fromIndex];
-  const updatedTasks = [...tasks];
+  const movedTask = state.tasks[fromIndex];
+  const updatedTasks = [...state.tasks];
 
   updatedTasks.splice(fromIndex, 1);
   updatedTasks.splice(toIndex, 0, movedTask);
 
-  tasks.length = 0;
-  tasks.push(...updatedTasks);
-
-  saveTasks(tasks);
+  state.tasks.length = 0;
+  state.tasks.push(...updatedTasks);
+  saveTasks(state.tasks);
   renderTasks();
 }
 
 function toggleTask(taskId) {
-  const currentTask = tasks.find((item) => item.id === taskId);
+  const currentTask = state.tasks.find((item) => item.id === taskId);
 
   if (currentTask) {
     currentTask.completed = !currentTask.completed;
-    saveTasks(tasks);
+    saveTasks(state.tasks);
     renderTasks();
   }
 }
@@ -142,7 +144,7 @@ function toggleTask(taskId) {
 function startEditMode(taskId) {
   list.innerHTML = '';
 
-  tasks.forEach((current) => {
+  state.tasks.forEach((current) => {
     if (current.id === taskId) {
       const item = document.createElement('li');
       item.className = 'todo-item';
@@ -177,7 +179,7 @@ function startEditMode(taskId) {
 
         current.title = value;
         current.date = editDateInput.value;
-        saveTasks(tasks);
+        saveTasks(state.tasks);
         renderTasks();
       });
 
@@ -194,18 +196,22 @@ function startEditMode(taskId) {
   });
 }
 
+taskInput.addEventListener('input', () => {
+  addButton.disabled = taskInput.value.trim() === '';
+});
+
 searchInput.addEventListener('input', (event) => {
-  searchValue = event.target.value;
+  state.searchValue = event.target.value;
   renderTasks();
 });
 
 statusFilter.addEventListener('change', (event) => {
-  statusValue = event.target.value;
+  state.statusValue = event.target.value;
   renderTasks();
 });
 
 sortSelect.addEventListener('change', (event) => {
-  sortValue = event.target.value;
+  state.sortValue = event.target.value;
   renderTasks();
 });
 
@@ -219,16 +225,18 @@ form.addEventListener('submit', (event) => {
     return;
   }
 
-  const task = {
-    id: Date.now(),
-    title,
-    date,
-    completed: false
-  };
+const task = {
+  id: Date.now(),
+  title,
+  date,
+  completed: false
+};
 
-  tasks.push(task);
-  saveTasks(tasks);
+  state.tasks.push(task);
+  saveTasks(state.tasks);
   renderTasks();
 
   form.reset();
+  addButton.disabled = true;
+  renderTasks();
 });
