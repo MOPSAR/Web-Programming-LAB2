@@ -1,3 +1,5 @@
+const tasks = [];
+
 const app = document.createElement('main');
 app.className = 'app';
 
@@ -87,3 +89,48 @@ listSection.append(list);
 container.append(title, controls, listSection);
 app.append(container);
 document.body.append(app);
+
+function createTaskElement(task) {
+  const item = document.createElement('li');
+  item.className = 'todo-item';
+
+  const text = document.createElement('span');
+  text.className = 'todo-item__text';
+  text.textContent = `${task.title} (${task.date || 'без даты'})`;
+
+  item.append(text);
+
+  return item;
+}
+
+function renderTasks() {
+  list.innerHTML = '';
+
+  tasks.forEach((task) => {
+    const taskElement = createTaskElement(task);
+    list.append(taskElement);
+  });
+}
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const title = taskInput.value.trim();
+  const date = dateInput.value;
+
+  if (!title) {
+    return;
+  }
+
+  const task = {
+    id: Date.now(),
+    title,
+    date,
+    completed: false
+  };
+
+  tasks.push(task);
+  renderTasks();
+
+  form.reset();
+});
