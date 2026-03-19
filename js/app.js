@@ -1,4 +1,5 @@
 const tasks = [];
+let searchValue = '';
 
 const app = document.createElement('main');
 app.className = 'app';
@@ -209,11 +210,20 @@ actions.append(editButton, toggleButton, deleteButton);
 function renderTasks() {
   list.innerHTML = '';
 
-  tasks.forEach((task) => {
+  const filteredTasks = tasks.filter((task) => {
+    return task.title.includes(searchValue);
+  });
+
+  filteredTasks.forEach((task) => {
     const taskElement = createTaskElement(task);
     list.append(taskElement);
   });
 }
+
+searchInput.addEventListener('input', (event) => {
+  searchValue = event.target.value;
+  renderTasks();
+});
 
 form.addEventListener('submit', (event) => {
   event.preventDefault();
