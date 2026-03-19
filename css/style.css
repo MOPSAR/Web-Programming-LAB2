@@ -88,3 +88,38 @@ body {
     flex-direction: column;
   }
 }
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #e3e7eb;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.todo-item__title {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.todo-item__date {
+  margin: 0;
+  color: #666;
+}
+
+.todo-item__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.todo-item__delete {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  background: #d9534f;
+  color: white;
+}

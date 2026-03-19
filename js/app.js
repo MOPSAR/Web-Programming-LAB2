@@ -94,11 +94,37 @@ function createTaskElement(task) {
   const item = document.createElement('li');
   item.className = 'todo-item';
 
-  const text = document.createElement('span');
-  text.className = 'todo-item__text';
-  text.textContent = `${task.title} (${task.date || 'без даты'})`;
+  const info = document.createElement('div');
+  info.className = 'todo-item__info';
 
-  item.append(text);
+  const text = document.createElement('h3');
+  text.className = 'todo-item__title';
+  text.textContent = task.title;
+
+  const date = document.createElement('p');
+  date.className = 'todo-item__date';
+  date.textContent = task.date ? `Срок: ${task.date}` : 'Без даты';
+
+  info.append(text, date);
+
+  const actions = document.createElement('div');
+  actions.className = 'todo-item__actions';
+
+  const deleteButton = document.createElement('button');
+  deleteButton.className = 'todo-item__delete';
+  deleteButton.textContent = 'Удалить';
+
+  deleteButton.addEventListener('click', () => {
+    const index = tasks.findIndex((item) => item.id === task.id);
+
+    if (index !== -1) {
+      tasks.splice(index, 1);
+      renderTasks();
+    }
+  });
+
+  actions.append(deleteButton);
+  item.append(info, actions);
 
   return item;
 }
