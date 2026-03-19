@@ -1,6 +1,7 @@
 const tasks = [];
 let searchValue = '';
 let statusValue = 'all';
+let sortValue = 'default';
 
 const app = document.createElement('main');
 app.className = 'app';
@@ -223,6 +224,22 @@ function renderTasks() {
     filteredTasks = filteredTasks.filter((task) => task.completed);
   }
 
+  if (sortValue === 'date-asc') {
+    filteredTasks.sort((a, b) => {
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+      return new Date(a.date) - new Date(b.date);
+    });
+  }
+
+  if (sortValue === 'date-desc') {
+    filteredTasks.sort((a, b) => {
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+      return new Date(b.date) - new Date(a.date);
+    });
+  }
+
   filteredTasks.forEach((task) => {
     const taskElement = createTaskElement(task);
     list.append(taskElement);
@@ -236,6 +253,11 @@ searchInput.addEventListener('input', (event) => {
 
 statusFilter.addEventListener('change', (event) => {
   statusValue = event.target.value;
+  renderTasks();
+});
+
+sortSelect.addEventListener('change', (event) => {
+  sortValue = event.target.value;
   renderTasks();
 });
 
