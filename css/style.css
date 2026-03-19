@@ -123,3 +123,20 @@ body {
   background: #d9534f;
   color: white;
 }
+
+.todo-item__toggle {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  background: #198754;
+  color: white;
+}
+
+.todo-item--completed {
+  opacity: 0.7;
+}
+
+.todo-item--completed .todo-item__title {
+  text-decoration: line-through;
+}

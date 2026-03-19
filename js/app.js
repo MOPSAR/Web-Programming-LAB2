@@ -110,6 +110,21 @@ function createTaskElement(task) {
   const actions = document.createElement('div');
   actions.className = 'todo-item__actions';
 
+
+const toggleButton = document.createElement('button');
+toggleButton.className = 'todo-item__toggle';
+toggleButton.textContent = task.completed ? 'Не выполнено' : 'Выполнено';
+
+toggleButton.addEventListener('click', () => {
+  const currentTask = tasks.find((item) => item.id === task.id);
+
+  if (currentTask) {
+    currentTask.completed = !currentTask.completed;
+    renderTasks();
+  }
+});
+
+
   const deleteButton = document.createElement('button');
   deleteButton.className = 'todo-item__delete';
   deleteButton.textContent = 'Удалить';
@@ -123,8 +138,11 @@ function createTaskElement(task) {
     }
   });
 
-  actions.append(deleteButton);
+  actions.append(toggleButton, deleteButton);
   item.append(info, actions);
+  if (task.completed) {
+  item.classList.add('todo-item--completed');
+  }
 
   return item;
 }
