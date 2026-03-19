@@ -149,3 +149,41 @@ body {
   background: #0d6efd;
   color: white;
 }
+
+.todo-item__edit-wrap {
+  display: grid;
+  grid-template-columns: 1fr 180px auto auto;
+  gap: 10px;
+  width: 100%;
+}
+
+.todo-item__edit-input,
+.todo-item__edit-date {
+  padding: 10px 12px;
+  border: 1px solid #cfd6dd;
+  border-radius: 8px;
+}
+
+.todo-item__save,
+.todo-item__cancel {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.todo-item__save {
+  background: #198754;
+  color: white;
+}
+
+.todo-item__cancel {
+  background: #6c757d;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .todo-item__edit-wrap {
+    grid-template-columns: 1fr;
+  }
+}

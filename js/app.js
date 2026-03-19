@@ -111,35 +111,63 @@ function createTaskElement(task) {
   actions.className = 'todo-item__actions';
 
 
-  const editButton = document.createElement('button');
+const editButton = document.createElement('button');
 editButton.className = 'todo-item__edit';
 editButton.textContent = 'Редактировать';
 
 editButton.addEventListener('click', () => {
-  const currentTask = tasks.find((item) => item.id === task.id);
+  list.innerHTML = '';
 
-  if (!currentTask) {
-    return;
-  }
+  tasks.forEach((current) => {
+    if (current.id === task.id) {
+      const item = document.createElement('li');
+      item.className = 'todo-item';
 
-  const newTitle = prompt('Введите новое название', currentTask.title);
-  if (newTitle === null) {
-    return;
-  }
+      const editWrap = document.createElement('div');
+      editWrap.className = 'todo-item__edit-wrap';
 
-  const trimmedTitle = newTitle.trim();
-  if (!trimmedTitle) {
-    return;
-  }
+      const editTitleInput = document.createElement('input');
+      editTitleInput.className = 'todo-item__edit-input';
+      editTitleInput.type = 'text';
+      editTitleInput.value = current.title;
 
-  const newDate = prompt('Введите новую дату в формате YYYY-MM-DD', currentTask.date);
-  if (newDate === null) {
-    return;
-  }
+      const editDateInput = document.createElement('input');
+      editDateInput.className = 'todo-item__edit-date';
+      editDateInput.type = 'date';
+      editDateInput.value = current.date;
 
-  currentTask.title = trimmedTitle;
-  currentTask.date = newDate;
-  renderTasks();
+      const saveButton = document.createElement('button');
+      saveButton.className = 'todo-item__save';
+      saveButton.textContent = 'Сохранить';
+
+      const cancelButton = document.createElement('button');
+      cancelButton.className = 'todo-item__cancel';
+      cancelButton.textContent = 'Отмена';
+
+      saveButton.addEventListener('click', () => {
+        const value = editTitleInput.value.trim();
+
+        if (!value) {
+          return;
+        }
+
+        current.title = value;
+        current.date = editDateInput.value;
+        renderTasks();
+      });
+
+      cancelButton.addEventListener('click', () => {
+        renderTasks();
+      });
+
+      editWrap.append(editTitleInput, editDateInput, saveButton, cancelButton);
+      item.append(editWrap);
+      list.append(item);
+    } else {
+      const normalItem = createTaskElement(current);
+      list.append(normalItem);
+    }
+  });
 });
 
 const toggleButton = document.createElement('button');
