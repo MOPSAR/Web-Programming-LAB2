@@ -1,5 +1,6 @@
 const tasks = [];
 let searchValue = '';
+let statusValue = 'all';
 
 const app = document.createElement('main');
 app.className = 'app';
@@ -210,9 +211,17 @@ actions.append(editButton, toggleButton, deleteButton);
 function renderTasks() {
   list.innerHTML = '';
 
-  const filteredTasks = tasks.filter((task) => {
-    return task.title.includes(searchValue);
+  let filteredTasks = tasks.filter((task) => {
+    return task.title.toLowerCase().includes(searchValue.toLowerCase());
   });
+
+  if (statusValue === 'active') {
+    filteredTasks = filteredTasks.filter((task) => !task.completed);
+  }
+
+  if (statusValue === 'completed') {
+    filteredTasks = filteredTasks.filter((task) => task.completed);
+  }
 
   filteredTasks.forEach((task) => {
     const taskElement = createTaskElement(task);
@@ -222,6 +231,11 @@ function renderTasks() {
 
 searchInput.addEventListener('input', (event) => {
   searchValue = event.target.value;
+  renderTasks();
+});
+
+statusFilter.addEventListener('change', (event) => {
+  statusValue = event.target.value;
   renderTasks();
 });
 
