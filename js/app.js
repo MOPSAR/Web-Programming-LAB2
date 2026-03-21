@@ -240,3 +240,4 @@ const task = {
   addButton.disabled = true;
   renderTasks();
 });
+renderTasks();
